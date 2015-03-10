@@ -20,12 +20,9 @@ http://steamcommunity.com/dev
 http://lab.playme.com/
 	We could use this API to find artists similar to a users taste and cross reference that with another users taste.
 
-
-4.
-
 5.
-	Documentation: http://docs.themoviedb.apiary.io/#
-
+	Documentation:
+	http://docs.themoviedb.apiary.io/#
 
 	I chose this API because it is involved in many peoples interests and is a good start for comparing people by comparing their interests in movies.
 	This can be done by genre, similar titles, producers, etc.
@@ -37,7 +34,7 @@ http://lab.playme.com/
 
 7.
 	I found creating the example page to be difficult, because everytime I added a little bit more functionality my output would dissapear,
-	but this is due to my lack of experience. I think are team should use this database.
+	but this is due to my lack of experience. I think our team should use this database.
 
 8.
 	The example I wrote could be expanded to retrieve a similair list of movies to the movie inputed. This can the be used to return a list of
