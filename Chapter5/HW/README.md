@@ -1,4 +1,6 @@
+This is a submission to assignment 4 for:
 Brandon Huebert
+Anay Khairatkar
 
 1. We are designing a web app that will decide who someone should be stuck with on a lonely island based on common interests, such as games, books, movies, etc.
 
