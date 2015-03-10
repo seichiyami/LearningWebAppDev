@@ -4,12 +4,39 @@ used code from http://stackoverflow.com/questions/5943630/basic-example-of-using
     and http://stackoverflow.com/questions/9899112/determine-if-a-ul-has-1-or-more-li-within
 */
 
+var outPutData = function(data) {
+    "use strict";
+    if ($(".movielist").length >= 1)
+    {
+        $(".movielist").empty();
+    }
+    var text = "";
+
+    data.results.forEach(function (item) {
+        text += "<li>" + item.original_title + "</li>";
+    });
+    
+    $("main .movielist").append(text);
+};
+
+var getAPIdata = function(search){
+    "use strict";
+    $.ajax({
+        url: "http://api.themoviedb.org/3/search/movie?api_key=716663ae9b4d8eb9f7e4a9c30ee7ee2f&query=" + search,
+        dataType: "jsonp",
+        success: function(data){
+            outPutData(data);
+        }
+    });
+};
+
 var processSearch = function() {
+    "use strict";
     var movie = $(".movie-input input").val();
     console.log("inside processSearch");
     console.log(movie);
 
-    if (movie === '')
+    if (movie === "")
     {
         $(".movielist").empty();
         $(".searchResponse").append("<p>Please enter a movie title</p>");
@@ -18,30 +45,6 @@ var processSearch = function() {
     {
         getAPIdata(movie);    
     }
-};
-
-var getAPIdata = function(search){
-    $.ajax({
-        url: 'http://api.themoviedb.org/3/search/movie?api_key=716663ae9b4d8eb9f7e4a9c30ee7ee2f&query=' + search,
-        dataType: 'jsonp',
-        success: function(data){
-            outPutData(data);
-        }
-    });
-};
-
-var outPutData = function(data) {
-    if ($(".movielist").length >= 1)
-    {
-        $(".movielist").empty();
-    }
-    var text = '';
-
-    data.results.forEach(function (item) {
-        text += "<li>" + item.original_title + "</li>";
-    });
-    
-    $("main .movielist").append(text);
 };
 
 var main = function() {
