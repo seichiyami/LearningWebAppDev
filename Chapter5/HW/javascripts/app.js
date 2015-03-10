@@ -3,6 +3,7 @@
 used code from http://stackoverflow.com/questions/5943630/basic-example-of-using-ajax-with-jsonp
     and http://stackoverflow.com/questions/9899112/determine-if-a-ul-has-1-or-more-li-within
 */
+
 var processSearch = function() {
     var movie = $(".movie-input input").val();
     console.log("inside processSearch");
@@ -50,3 +51,26 @@ var main = function() {
 };
 
 $(document).ready(main);
+/*
+var main = function () {
+    "use strict";
+
+
+    var requestURL = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=270583746863D28DF718B9C989ED2BD7&steamid=76561198041614970&format=json";
+    $.getJSON(requestURL, function(item) {
+        var text = '';
+        console.log(item);
+        /*
+        item.response.games.forEach(function (item) {
+            //text += "<li>" + item.original_title + "</li>";
+            console.log(item)
+            //$("main .movielist").append(text);
+
+            $img.fadeIn();
+        });
+
+
+    });
+};
+$(document).ready(main);
+*/
