@@ -65,9 +65,11 @@ app.post("/link", function (req, res) {
   var response = {"longL": null, "shortL": null, "topTen": []};
   var newURL;
   response.longL = "hello";
-  //see if the sent over url is in the 
+
   //if the sent over url is a short url see if it is in the shortURL column
-  if (temp.substring(0,14) === "localhost:3000") {
+  console.log(temp.substring(0,14));
+
+  if (temp.indexOf("localhost:3000") > -1) {
     url.findOne({"shortURL" : temp}, function(err, reply) {
       if (err !== null) {
         console.log("ERROR: " + err);
@@ -92,13 +94,13 @@ app.post("/link", function (req, res) {
         	});
         	res.json(response);
         	console.log("Short url found");
-  			console.log(response);
+          console.log(response);
         });
         console.log("outside of callback, after");
-  		console.log(response); 
+        console.log(response); 
         console.log("Short url found");
 
-  		console.log(response);
+  		//console.log(response);
       }
       else {
         console.log("short url is not in our database");
@@ -130,10 +132,10 @@ app.post("/link", function (req, res) {
         	});
         	res.json(response);
         	console.log("Large url found");
-  			console.log(response);
+  			  console.log(response);
         });
         console.log("outside of callback, after");
-  		console.log(response); 
+  		  console.log(response); 
       }
       else {
         //short or long not found so put into database with short url
@@ -157,10 +159,10 @@ app.post("/link", function (req, res) {
         	});
         	res.json(response);
         	console.log("Object saved");
-  			console.log(response);
+          console.log(response);
         });
         console.log("outside of callback, after");
-  		console.log(response); 
+  		  console.log(response); 
       }
     });
   }

@@ -12,8 +12,10 @@ var main = function (){
 			$(".result").append($("<p>").append("Original Long Url: " + response.longL));
 			$(".result").append($("<p>").append("Short Url: " + response.shortL));
 
+			$(".topListHere").empty();
 			response.topTen.forEach(function (object) {
-				$(".topListHere").append($("<p>").append(object.longURL).append(" Visits: ").append(object.hits));
+				$(".topListHere").append($("<p>").append(object.longURL).append("  Visits:  ").append(object.hits).
+					append("  Short URL:  ").append(object.shortURL));
 				console.log("Objects: " + JSON.stringify(object));
 
 			});
