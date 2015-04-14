@@ -42,78 +42,18 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", routes);
 app.use("/users", users);
 
-/*
-//get url id and will proccess
-app.get("/:id", function (req, res) {
-  "use strict";
-  console.log(req.params.id);
-  var shortLink = "localhost:3000/" + req.params.id;
-  console.log(shortLink);
-  console.log(shortLink);
-
-  url.findOne({"shortURL" : shortLink}, function (err, reply) {
-    if (err !== null) {
-      console.log("ERROR: " + err);
-      return;
-    }
-
-    if (reply) {
-      console.log("http://" + reply.url);
-      res.redirect("http://" + reply.url);
-      url.update({"shortURL" : shortLink}, {$inc : {hits : 1}});
-      console.log("Am I ever here");
-    }
-    else {
-      res.send("Error: Unable to find site's URL to redirect to.");
-    }
-
-    console.log(reply.url);
-    console.log(reply.shortURL);
-  });
-});
-*/
-//https://ricochen.wordpress.com/2012/02/28/example-sorted-set-functions-with-node-js-redis/
-//used code to convert to javascript object to respond
-app.post("/getTopList", function (req, res) {
-  "use strict";
-  //(No search params, return top 10 sorted by hit field)
-  /*
-  url.find({}, {limit : 10, sort : {hits : 1}}, function(err, reply) {
-
-    if (err !== null) {
-      console.log("ERROR: " + err);
-      return;
-    }
-
-    res.json(JSON.stringify(reply));
-    console.log(reply);
-  });
-*/
-  /*
-  client.zrevrange('counter', 0, -1, function (err, reply) {
-    var lists =_.groupBy(reply, function(a,b) {
-      return b;
-      // return Math.floor(b/2);
-    });
-    res.json(JSON.stringify(lists));
-    console.log(lists);
-    //console.log(_.toArray(lists));
-  }); 
-  */
-});
-
-var topTen = function() {
+var topTen = function(callback) {
 	  "use strict";
   //(No search params, return top 10 sorted by hit field)
 
-  url.find({}, null, {limit : 10, sort : {hits : 1}}, function(err, reply) {
+  url.find({}, null, {limit : 10, sort : {hits : -1}}, function(err, reply) {
     if (err !== null) {
       console.log("ERROR: " + err);
       return;
     }
     console.log("Inside top 10 function");
 	console.log(reply);
-    return reply;
+    callback(reply);
   });
 };
 
@@ -122,7 +62,7 @@ app.post("/link", function (req, res) {
   var temp = req.body.link;
   console.log("You entered " + temp);
   var linkShort;
-  var response = {"longL": null, "shortL": null, "topTen": null};
+  var response = {"longL": null, "shortL": null, "topTen": []};
   var newURL;
   response.longL = "hello";
   //see if the sent over url is in the 
@@ -142,12 +82,22 @@ app.post("/link", function (req, res) {
       			console.log("Did not update count:" + err);
       		}
       	});
+
+
         response.longL = reply.longURL;
         response.shortL = reply.shortURL;
-        response.topTen = topTen();
+        topTen(function(value) {
+        	value.forEach(function (object) {
+        		response.topTen.push(object);
+        	});
+        	res.json(response);
+        	console.log("Short url found");
+  			console.log(response);
+        });
+        console.log("outside of callback, after");
+  		console.log(response); 
         console.log("Short url found");
 
-        res.json(response);
   		console.log(response);
       }
       else {
@@ -163,8 +113,6 @@ app.post("/link", function (req, res) {
       }
 
       if (reply) {
-      	//url.update({"longURL" : reply.longURL}, {$inc: {"hits" : 2}});
-
       	reply.hits += 1;
       	reply.save(function (err) {
       		if (err) {
@@ -172,13 +120,20 @@ app.post("/link", function (req, res) {
       		}
       	});
 
+      	console.log(response.topTen);
         response.longL = reply.longURL;
         response.shortL = reply.shortURL;
-        response.topTen = topTen();
-        console.log("Large url found");
 
-        res.json(response);
-  		console.log(response);
+        topTen(function(value) {
+        	value.forEach(function (object) {
+        		response.topTen.push(object);
+        	});
+        	res.json(response);
+        	console.log("Large url found");
+  			console.log(response);
+        });
+        console.log("outside of callback, after");
+  		console.log(response); 
       }
       else {
         //short or long not found so put into database with short url
@@ -196,17 +151,19 @@ app.post("/link", function (req, res) {
 
         response.longL = temp;
         response.shortL = linkShort;
-        response.topTen = topTen();
-
-        res.json(response);
+        topTen(function(value) {
+        	value.forEach(function (object) {
+        		response.topTen.push(object);
+        	});
+        	res.json(response);
+        	console.log("Object saved");
+  			console.log(response);
+        });
+        console.log("outside of callback, after");
   		console.log(response); 
       }
     });
   }
-  
-
-  
-
 });
 
 module.exports = app;
