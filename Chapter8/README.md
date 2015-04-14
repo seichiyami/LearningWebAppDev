@@ -1,9 +1,10 @@
 Brandon Huebert
+Tommy Pham
 
-This is a submission for assignment 6.
+This is a submission for assignment 8.
 
 The github directory is:
-https://github.com/seichiyami/node-dev-bootstrap/tree/master/app/assignment6
+https://github.com/seichiyami/LearningWebAppDev/tree/master/Chapter8
 
 The screenshots are located in:
-https://github.com/seichiyami/node-dev-bootstrap/tree/master/app/assignment6/screenshots
+https://github.com/seichiyami/LearningWebAppDev/tree/master/Chapter8/screenshots
