@@ -1,4 +1,5 @@
-Brandon Huebert
+Brandon Huebert,
+
 Tommy Pham
 
 This is a submission for assignment 8.
