@@ -1,3 +1,6 @@
+// Server-side code
+/* jshint node: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, strict: true, undef: true, unused: true */ 
+
 var express = require("express"),
     http = require("http"),
     // import the mongoose library
@@ -12,7 +15,7 @@ app.use(express.static(__dirname + "/client"));
 app.use(express.bodyParser());
 
 // connect to the amazeriffic data store in mongo
-mongoose.connect('mongodb://localhost/amazeriffic');
+mongoose.connect("mongodb://localhost/amazeriffic");
 
 // This is our mongoose model for todos
 var ToDoSchema = mongoose.Schema({
@@ -28,6 +31,7 @@ server.listen(3000);
 
 //event emitter, when new data is received from existing connection
 io.on("connection", function(socket) {
+	"use strict";
 	//write to socket (perhaps)
 	console.log("client-server connection");
 	//when someone posts is should be sent through socket to every other user for each page
@@ -42,6 +46,7 @@ io.on("connection", function(socket) {
 });
 
 app.get("/todos.json", function (req, res) {
+	"use strict";
     ToDo.find({}, function (err, toDos) {
 	res.json(toDos);
     });
@@ -50,6 +55,7 @@ app.get("/todos.json", function (req, res) {
 
 
 app.post("/todos", function (req, res) {
+	"use strict";
     console.log(req.body);
     var newToDo = new ToDo({"description":req.body.description, "tags":req.body.tags});
     newToDo.save(function (err, result) {
