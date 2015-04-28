@@ -25,7 +25,6 @@ var ToDoSchema = mongoose.Schema({
 
 var ToDo = mongoose.model("ToDo", ToDoSchema);
 
-
 //http.createServer(app).listen(3000);
 server.listen(3000);
 
@@ -36,13 +35,9 @@ io.on("connection", function(socket) {
 	console.log("client-server connection");
 	//when someone posts is should be sent through socket to every other user for each page
 	socket.on("newpost", function(obj) {
-		console.log("newpost");
 		console.log(obj);
 		socket.broadcast.emit("newpost", obj);
-		console.log("end newpost");
 	});
-
-
 });
 
 app.get("/todos.json", function (req, res) {
@@ -51,8 +46,6 @@ app.get("/todos.json", function (req, res) {
 	res.json(toDos);
     });
 });
-
-
 
 app.post("/todos", function (req, res) {
 	"use strict";
