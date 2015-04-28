@@ -1,13 +1,91 @@
 var main = function (toDoObjects) {
     "use strict";
-    console.log("SANITY CHECK");
     var socket = io.connect("http://localhost:3000");
-
+    var toDos;
+    var $content,
+        i;
+    console.log("SANITY CHECK");
+    
     socket.on("newpost", function(obj) {
-        console.log("obj");
-    })
+        console.log("dynamic update should be here");
+        //console.log(obj);
+        console.log("end dynamic update");
 
-    var toDos = toDoObjects.map(function (toDo) {
+        toDoObjects = obj;
+        toDos = toDoObjects.map(function (toDo) {
+                  // we'll just return the description
+                  // of this toDoObject
+                  return toDo.description;
+            });
+
+        console.log(toDoObjects);
+        console.log(toDos);
+
+        console.log("This should empty content");
+
+        $("main .content").empty();
+        
+        if ($(".tabs .active").text() === "Newest") {
+            console.log("This is newest");
+            $content = $("<ul>");
+            for (i = toDos.length-1; i >= 0; i--) {
+                $content.append($("<li>").text(toDos[i]));
+            }
+            console.log($content);
+            $("main .content").append($content);
+
+        } else if ($(".tabs .active").text() === "Oldest") {
+            console.log("This is oldest");
+            $content = $("<ul>");
+            toDos.forEach(function (todo) {
+                $content.append($("<li>").text(todo));
+            });
+            $("main .content").append($content);
+
+        } else if ($(".tabs .active").text() === "Tags") {
+            var tags = [];
+
+            toDoObjects.forEach(function (toDo) {
+                toDo.tags.forEach(function (tag) {
+                    if (tags.indexOf(tag) === -1) {
+                        tags.push(tag);
+                    }
+                });
+            });
+            console.log(tags);
+
+            var tagObjects = tags.map(function (tag) {
+                var toDosWithTag = [];
+
+                toDoObjects.forEach(function (toDo) {
+                    if (toDo.tags.indexOf(tag) !== -1) {
+                        toDosWithTag.push(toDo.description);
+                    }
+                });
+
+                return { "name": tag, "toDos": toDosWithTag };
+            });
+
+            console.log(tagObjects);
+
+            tagObjects.forEach(function (tag) {
+                var $tagName = $("<h3>").text(tag.name),
+                    $content = $("<ul>");
+
+
+                tag.toDos.forEach(function (description) {
+                    var $li = $("<li>").text(description);
+                    $content.append($li);
+                });
+
+                $("main .content").append($tagName);
+                $("main .content").append($content);
+            });
+        }   
+    });
+
+    //Dont change below here
+    toDos = toDoObjects.map(function (toDo) {
           // we'll just return the description
           // of this toDoObject
           return toDo.description;
@@ -18,10 +96,8 @@ var main = function (toDoObjects) {
 
         // create a click handler for this element
         $element.on("click", function () {
-            var $content,
-                $input,
-                $button,
-                i;
+            var $input,
+                $button;
 
             $(".tabs a span").removeClass("active");
             $element.addClass("active");
@@ -32,11 +108,6 @@ var main = function (toDoObjects) {
                 for (i = toDos.length-1; i >= 0; i--) {
                     $content.append($("<li>").text(toDos[i]));
                 }
-                socket = io.connect("http://localhost:3000");
-
-                socket.on("posts", function(obj) {
-                    console.log("incomming object");
-                });
 
             } else if ($element.parent().is(":nth-child(2)")) {
                 $content = $("<ul>");
@@ -96,11 +167,12 @@ var main = function (toDoObjects) {
                         tags = $tagInput.val().split(","),
                         newToDo = {"description":description, "tags":tags};
 
-                    socket.emit("newpost", newToDo);
+                    //socket.emit("newpost", newToDo);
 
                     $.post("todos", newToDo, function (result) {
                         console.log(result);
 
+                        socket.emit("newpost", result);
                         //toDoObjects.push(newToDo);
                         toDoObjects = result;
 
@@ -135,11 +207,3 @@ $(document).ready(function () {
         main(toDoObjects);
     });
 });
-/*
-var socket = io.connect("http://localhost:3000");
-
-socket.on("posts", obj) {
-    console.log("incomming object");
-}
-
-socket.on("connection", )

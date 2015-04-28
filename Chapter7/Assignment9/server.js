@@ -33,8 +33,9 @@ io.on("connection", function(socket) {
 	//when someone posts is should be sent through socket to every other user for each page
 	socket.on("newpost", function(obj) {
 		console.log("newpost");
-		console.log(obj)
+		console.log(obj);
 		socket.broadcast.emit("newpost", obj);
+		console.log("end newpost");
 	});
 
 
